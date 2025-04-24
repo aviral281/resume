@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Communication Skills Portal</title>
+
+  <style>
+    :root{
+      --bg-color:#f9fafb;
+      --text-color:#1f2937;
+      --primary-color:#3b82f6;
+      --secondary-color:#2563eb;
+      --button-text:#ffffff;
+    }
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg-color);color:var(--text-color);display:flex;flex-direction:column;min-height:100vh}
+    header{padding:2rem 1rem 1rem;text-align:center;font-size:2rem;font-weight:700;color:red;} /* red title */
+    main{flex:1;display:flex;flex-direction:column;align-items:center;gap:1rem}
+    .btn{padding:1rem 2rem;font-size:1rem;border:none;border-radius:.5rem;background:var(--primary-color);color:var(--button-text);cursor:pointer;transition:background .3s}
+    .btn:hover{background:var(--secondary-color)}
+    .lang-container{display:none;flex-direction:column;gap:.5rem;margin-top:1rem}
+    footer{text-align:right;padding:1rem;font-size:.75rem}
+    /* settings modal */
+    .settings-btn{position:fixed;top:1rem;right:1rem;padding:.5rem 1rem;font-size:.9rem;border:none;border-radius:.5rem;background:var(--secondary-color);color:var(--button-text);cursor:pointer}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);justify-content:center;align-items:center}
+    .modal-content{background:#fff;padding:2rem;border-radius:.75rem;min-width:260px}
+    .color-input{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+  </style>
+</head>
+<body>
+  <!-- Settings button -->
+  <button class="settings-btn" id="openSettings">⚙️ Settings</button>
+
+  <!-- Title -->
+  <header>Presentations:</header>
+
+  <!-- Main section -->
+  <main>
+    <button class="btn" id="commBtn">Communication Skills Presentation</button>
+    <div class="lang-container" id="commLangs"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer><span style="color:cyan">Powered by Developer Aviral</span></footer>
+
+  <!-- Settings Modal (colors only) -->
+  <div class="modal" id="settingsModal">
+    <div class="modal-content">
+      <h3>Customize Theme</h3>
+      <div class="color-input">
+        <label for="bgColor">Background:</label>
+        <input type="color" id="bgColor" value="#f9fafb" />
+      </div>
+      <div class="color-input">
+        <label for="btnColor">Button:</label>
+        <input type="color" id="btnColor" value="#3b82f6" />
+      </div>
+      <button class="btn" id="saveSettings">Save</button>
+    </div>
+  </div>
+
+  <script>
+  /* ---------- PASTE YOUR TWO LINKS HERE ---------- */
+  const commLinks = {
+    Hindi   : 'https://drive.google.com/file/d/1DxUN2PdIE5UwAyzrtt0mW1BN6SERnQ1c/view?usp=sharing',  // e.g. 'https://example.com/comm-hindi.pptx'
+    English : 'https://drive.google.com/file/d/1wBJNCBug0VX7tah82H-10X7XIX8moJR8/view?usp=sharing'   // e.g. 'https://example.com/comm-english.pptx'
+  };
+  /* ----------------------------------------------- */
+
+  const languages = ['Hindi','English'];
+  const commLangs = document.getElementById('commLangs');
+
+  function buildLangButtons(){
+    commLangs.innerHTML='';
+    languages.forEach(lang=>{
+      const b=document.createElement('button');
+      b.className='btn';
+      b.textContent=lang;
+      b.onclick=()=>openLink(commLinks[lang]);
+      commLangs.appendChild(b);
+    });
+  }
+  buildLangButtons();
+
+  document.getElementById('commBtn').onclick=()=>{
+    commLangs.style.display = commLangs.style.display==='flex' ? 'none' : 'flex';
+  };
+
+  function openLink(url){
+    url ? window.open(url,'_blank') : alert('Link not set yet!');
+  }
+
+  /* ---------- Settings modal (colors) ---------- */
+  const openSettings=document.getElementById('openSettings');
+  const settingsModal=document.getElementById('settingsModal');
+  const saveSettings=document.getElementById('saveSettings');
+  const bgColorPicker=document.getElementById('bgColor');
+  const btnColorPicker=document.getElementById('btnColor');
+
+  openSettings.onclick=()=>settingsModal.style.display='flex';
+  settingsModal.onclick=e=>{if(e.target===settingsModal)settingsModal.style.display='none';};
+
+  saveSettings.onclick=()=>{
+    document.documentElement.style.setProperty('--bg-color',bgColorPicker.value);
+    document.documentElement.style.setProperty('--primary-color',btnColorPicker.value);
+    settingsModal.style.display='none';
+  };
+  </script>
+</body>
+</html>
