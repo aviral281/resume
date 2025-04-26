@@ -1,110 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Communication Skills Portal</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Global Presentation Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg-color:#f9fafb;
-      --text-color:#1f2937;
-      --primary-color:#3b82f6;
-      --secondary-color:#2563eb;
-      --button-text:#ffffff;
+    :root {
+      --main-color: #4CAF50;
+      --bg-light: #f0f0f0;
+      --bg-dark: #121212;
     }
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg-color);color:var(--text-color);display:flex;flex-direction:column;min-height:100vh}
-    header{padding:2rem 1rem 1rem;text-align:center;font-size:2rem;font-weight:700;color:red;} /* red title */
-    main{flex:1;display:flex;flex-direction:column;align-items:center;gap:1rem}
-    .btn{padding:1rem 2rem;font-size:1rem;border:none;border-radius:.5rem;background:var(--primary-color);color:var(--button-text);cursor:pointer;transition:background .3s}
-    .btn:hover{background:var(--secondary-color)}
-    .lang-container{display:none;flex-direction:column;gap:.5rem;margin-top:1rem}
-    footer{text-align:right;padding:1rem;font-size:.75rem}
-    /* settings modal */
-    .settings-btn{position:fixed;top:1rem;right:1rem;padding:.5rem 1rem;font-size:.9rem;border:none;border-radius:.5rem;background:var(--secondary-color);color:var(--button-text);cursor:pointer}
-    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);justify-content:center;align-items:center}
-    .modal-content{background:#fff;padding:2rem;border-radius:.75rem;min-width:260px}
-    .color-input{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: 0.3s;
+      background-color: var(--bg-light);
+      color: #333;
+      min-height: 100vh;
+      background-size: cover;
+      background-position: center;
+    }
+    body.dark {
+      background-color: var(--bg-dark);
+      color: #eee;
+    }
+    header {
+      background: var(--main-color);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    #content {
+      padding: 2rem;
+      text-align: center;
+    }
+    .btn {
+      padding: 0.8rem 1.5rem;
+      margin: 1rem;
+      font-size: 1rem;
+      border: none;
+      background: var(--main-color);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #45a049;
+    }
+    .fixed-btn {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+    }
+    .fixed-btn#adminBtn {
+      right: 8rem;
+    }
+    #modal, #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      z-index: 10;
+    }
+    #modalContent {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+    }
+    #modalContent.dark {
+      background: #333;
+      color: white;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.7rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    a {
+      color: var(--main-color);
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 1rem;
+    }
   </style>
 </head>
 <body>
-  <!-- Settings button -->
-  <button class="settings-btn" id="openSettings">⚙️ Settings</button>
 
-  <!-- Title -->
-  <header>Presentations:</header>
+<header>Global Presentation Hub</header>
 
-  <!-- Main section -->
-  <main>
-    <button class="btn" id="commBtn">Communication Skills Presentation</button>
-    <div class="lang-container" id="commLangs"></div>
-  </main>
+<div id="content">
+  <p>Loading presentations...</p>
+</div>
 
-  <!-- Footer -->
-  <footer><span style="color:cyan">Powered by Developer Aviral</span></footer>
+<button class="btn fixed-btn" id="adminBtn">Secret Settings</button>
+<button class="btn fixed-btn" id="settingsBtn" style="right:1rem;">Settings</button>
 
-  <!-- Settings Modal (colors only) -->
-  <div class="modal" id="settingsModal">
-    <div class="modal-content">
-      <h3>Customize Theme</h3>
-      <div class="color-input">
-        <label for="bgColor">Background:</label>
-        <input type="color" id="bgColor" value="#f9fafb" />
-      </div>
-      <div class="color-input">
-        <label for="btnColor">Button:</label>
-        <input type="color" id="btnColor" value="#3b82f6" />
-      </div>
-      <button class="btn" id="saveSettings">Save</button>
-    </div>
-  </div>
+<div id="modal">
+  <div id="modalContent"></div>
+</div>
+<div id="overlay"></div>
 
-  <script>
-  /* ---------- PASTE YOUR TWO LINKS HERE ---------- */
-  const commLinks = {
-    Hindi   : 'coming soon',  // e.g. 'https://example.com/comm-hindi.pptx'
-    English : 'https://docs.google.com/presentation/d/1-ID1fdCnMYFxm2hUVfn-Au-xiueoKnze/edit?usp=sharing&ouid=115622745296755769261&rtpof=true&sd=true'   // e.g. 'https://example.com/comm-english.pptx'
-  };
-  /* ----------------------------------------------- */
+<footer>Made with passion | Global Presentation Hub</footer>
 
-  const languages = ['Hindi','English'];
-  const commLangs = document.getElementById('commLangs');
+<script>
+// ====== Variables ======
+let presentations = JSON.parse(localStorage.getItem('presentations')) || {};
+let backgroundImage = localStorage.getItem('backgroundImage') || '';
+let backgroundColor = localStorage.getItem('backgroundColor') || '';
+let themeMode = localStorage.getItem('themeMode') || 'auto';
+let userCountry = localStorage.getItem('userCountry') || '';
+let userLanguage = localStorage.getItem('userLanguage') || 'en';
 
-  function buildLangButtons(){
-    commLangs.innerHTML='';
-    languages.forEach(lang=>{
-      const b=document.createElement('button');
-      b.className='btn';
-      b.textContent=lang;
-      b.onclick=()=>openLink(commLinks[lang]);
-      commLangs.appendChild(b);
-    });
+// ====== Elements ======
+const contentDiv = document.getElementById('content');
+const modal = document.getElementById('modal');
+const overlay = document.getElementById('overlay');
+const modalContent = document.getElementById('modalContent');
+
+// ====== Functions ======
+
+function saveData() {
+  localStorage.setItem('presentations', JSON.stringify(presentations));
+  localStorage.setItem('backgroundImage', backgroundImage);
+  localStorage.setItem('backgroundColor', backgroundColor);
+  localStorage.setItem('themeMode', themeMode);
+  localStorage.setItem('userCountry', userCountry);
+  localStorage.setItem('userLanguage', userLanguage);
+}
+
+function openModal(html) {
+  modalContent.innerHTML = html;
+  modal.style.display = 'flex';
+  overlay.style.display = 'block';
+  if (document.body.classList.contains('dark')) {
+    modalContent.classList.add('dark');
+  } else {
+    modalContent.classList.remove('dark');
   }
-  buildLangButtons();
+}
+function closeModal() {
+  modal.style.display = 'none';
+  overlay.style.display = 'none';
+}
 
-  document.getElementById('commBtn').onclick=()=>{
-    commLangs.style.display = commLangs.style.display==='flex' ? 'none' : 'flex';
-  };
+overlay.onclick = closeModal;
 
-  function openLink(url){
-    url ? window.open(url,'_blank') : alert('Link not set yet!');
+function applyTheme() {
+  if (themeMode === 'dark') {
+    document.body.classList.add('dark');
+  } else if (themeMode === 'light') {
+    document.body.classList.remove('dark');
+  } else {
+    const hour = new Date().getHours();
+    if (hour >= 18 || hour < 6) document.body.classList.add('dark');
+    else document.body.classList.remove('dark');
   }
+  if (backgroundImage) {
+    document.body.style.backgroundImage = `url(${backgroundImage})`;
+    document.body.style.backgroundColor = '';
+  } else if (backgroundColor) {
+    document.body.style.backgroundImage = '';
+    document.body.style.backgroundColor = backgroundColor;
+  }
+}
 
-  /* ---------- Settings modal (colors) ---------- */
-  const openSettings=document.getElementById('openSettings');
-  const settingsModal=document.getElementById('settingsModal');
-  const saveSettings=document.getElementById('saveSettings');
-  const bgColorPicker=document.getElementById('bgColor');
-  const btnColorPicker=document.getElementById('btnColor');
+function renderContent() {
+  contentDiv.innerHTML = '';
+  for (let cat in presentations) {
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.textContent = cat;
+    btn.onclick = () => selectLanguage(cat);
+    contentDiv.appendChild(btn);
+  }
+}
 
-  openSettings.onclick=()=>settingsModal.style.display='flex';
-  settingsModal.onclick=e=>{if(e.target===settingsModal)settingsModal.style.display='none';};
+function selectLanguage(category) {
+  let html = `<h2>${category}</h2><select id="langSel">`;
+  for (let lang in presentations[category]) {
+    html += `<option value="${presentations[category][lang]}">${lang}</option>`;
+  }
+  html += `</select><br><br><button class="btn" onclick="openPresentation()">Open Presentation</button>`;
+  openModal(html);
+}
 
-  saveSettings.onclick=()=>{
-    document.documentElement.style.setProperty('--bg-color',bgColorPicker.value);
-    document.documentElement.style.setProperty('--primary-color',btnColorPicker.value);
-    settingsModal.style.display='none';
-  };
-  </script>
+function openPresentation() {
+  const url = document.getElementById('langSel').value;
+  window.open(url, '_blank');
+}
+
+function settingsMenu() {
+  let langList = getAllLanguages();
+  let langOptions = '';
+  for (let code in langList) {
+    langOptions += `<option value="${code}" ${code === userLanguage ? 'selected' : ''}>${langList[code]}</option>`;
+  }
+  let html = `
+    <h2>Settings</h2>
+    <label>Change Language:</label><br>
+    <select id="languageSel">${langOptions}</select><br><br>
+    <label>Change Theme:</label><br>
+    <select id="themeSel">
+      <option value="auto" ${themeMode==='auto'?'selected':''}>Auto (Day/Night)</option>
+      <option value="light" ${themeMode==='light'?'selected':''}>Light</option>
+      <option value="dark" ${themeMode==='dark'?'selected':''}>Dark</option>
+    </select><br><br>
+    <label>Upload Background Image:</label><br>
+    <input type="file" id="bgUpload"><br><br>
+    <label>Or Select Background Color:</label><br>
+    <input type="color" id="bgColor" value="${backgroundColor}"><br><br>
+    <button class="btn" onclick="saveSettings()">Save</button>
+  `;
+  openModal(html);
+}
+
+function saveSettings() {
+  userLanguage = document.getElementById('languageSel').value;
+  themeMode = document.getElementById('themeSel').value;
+  const file = document.getElementById('bgUpload').files[0];
+  const bgColor = document.getElementById('bgColor').value;
+  
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      backgroundImage = e.target.result;
+      backgroundColor = '';
+      applyTheme();
+      saveData();
+      closeModal();
+    }
+    reader.readAsDataURL(file);
+  } else {
+    backgroundImage = '';
+    backgroundColor = bgColor;
+    applyTheme();
+    saveData();
+    closeModal();
+  }
+}
+
+function adminLogin() {
+  let html = `
+    <h2>Admin Login</h2>
+    <input type="password" id="adminPass" placeholder="Enter Password"><br><br>
+    <button class="btn" id="loginBtn">Enter</button>
+  `;
+  openModal(html);
+
+  document.getElementById('loginBtn').onclick = checkAdmin;
+}
+
+function checkAdmin() {
+  const pass = document.getElementById('adminPass').value.trim();
+  if (pass === 'avi-5207') {
+    adminPanel();
+  } else {
+    alert('Wrong Password!');
+    closeModal();
+  }
+}
+
+function adminPanel() {
+  let html = `
+    <h2>Admin Panel</h2>
+    <input id="newCat" placeholder="Presentation Category"><br>
+    <input id="newLang" placeholder="Language (e.g., en, hi, fr)"><br>
+    <input id="newLink" placeholder="Presentation Link"><br><br>
+    <button class="btn" onclick="addPresentation()">Add</button>
+  `;
+  openModal(html);
+}
+
+function addPresentation() {
+  const cat = document.getElementById('newCat').value.trim();
+  const lang = document.getElementById('newLang').value.trim();
+  const link = document.getElementById('newLink').value.trim();
+  if (!presentations[cat]) presentations[cat] = {};
+  presentations[cat][lang] = link;
+  saveData();
+  renderContent();
+  alert('Presentation Added!');
+  closeModal();
+}
+
+function getAllLanguages() {
+  return {
+    "en":"English", "es":"Spanish", "fr":"French", "de":"German", "hi":"Hindi",
+    "ar":"Arabic", "zh":"Chinese", "ru":"Russian", "pt":"Portuguese", "ja":"Japanese",
+    "ko":"Korean", "tr":"Turkish", "bn":"Bengali", "vi":"Vietnamese", "it":"Italian",
+    "pa":"Punjabi", "ur":"Urdu", "fa":"Persian", "pl":"Polish", "uk":"Ukrainian",
+    "nl":"Dutch", "ro":"Romanian", "th":"Thai", "id":"Indonesian", "sv":"Swedish",
+    "fi":"Finnish", "cs":"Czech", "el":"Greek", "he":"Hebrew", "ms":"Malay",
+    "ta":"Tamil", "mr":"Marathi", "te":"Telugu", "gu":"Gujarati", "kn":"Kannada",
+    "ml":"Malayalam", "sw":"Swahili", "zu":"Zulu", "xh":"Xhosa", "af":"Afrikaans"
+  }
+}
+
+// ====== Start App ======
+
+applyTheme();
+renderContent();
+
+// Buttons
+document.getElementById('settingsBtn').onclick = settingsMenu;
+document.getElementById('adminBtn').onclick = adminLogin;
+
+</script>
 </body>
 </html>
